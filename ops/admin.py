@@ -34,7 +34,7 @@ class CheckTaskAdmin(admin.ModelAdmin):
         # print(obj.db.ip, obj.db.username, obj.db.password, obj.db.dbname, obj.sentence.sentence)
 
         # 执行语句
-        res = sql_run(obj.db.ip, obj.db.username, obj.db.password, obj.db.dbname, obj.sentence.sentence)
+        res = sql_run(obj.db.ip, obj.db.port, obj.db.username, obj.db.password, obj.db.dbname, obj.sentence.sentence)
         # print("res: ", res)
         if res.get("data"):
             obj.result = res.get("data")

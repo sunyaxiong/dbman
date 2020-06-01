@@ -5,6 +5,7 @@ from django.db import models
 
 class DBConf(models.Model):
     ip = models.GenericIPAddressField("IP")
+    port = models.IntegerField("端口", default=1433)
     username = models.CharField("用户名", max_length=128)
     password = models.CharField("密码", max_length=128)
     dbname = models.CharField("db名称", max_length=128, null=True, blank=True)
