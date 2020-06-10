@@ -31,7 +31,7 @@ class CheckTask(models.Model):
 
     db = models.ForeignKey(DBConf, verbose_name="目标数据库", on_delete=models.DO_NOTHING, db_constraint=False)
     sentence = models.ForeignKey(SentenceTemplate, verbose_name="语句", on_delete=models.DO_NOTHING, db_constraint=False)
-    result = models.TextField("检查结果")
+    result = models.TextField("检查结果", null=True, blank=True)
     dt_created = models.DateTimeField(auto_now_add=True, verbose_name='created datetime')
     dt_updated = models.DateTimeField(auto_now=True, verbose_name='updated datetime')
 
