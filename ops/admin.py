@@ -1,6 +1,8 @@
 from django.contrib import admin
-from .models import CheckTask, DBConf, SentenceTemplate
+from django.template.response import TemplateResponse
+from .models import CheckTask, DBConf, SentenceTemplate, Inspect
 from lib.dbsdk import sql_run
+
 
 # Register your models here.
 
@@ -8,7 +10,7 @@ from lib.dbsdk import sql_run
 @admin.register(DBConf)
 class DBConfAdmin(admin.ModelAdmin):
 
-    list_display = ("ip", "username", "password", "dbname")
+    list_display = ("ip", "username", "password")
 
 
 @admin.register(SentenceTemplate)
@@ -34,7 +36,7 @@ class CheckTaskAdmin(admin.ModelAdmin):
         # print(obj.db.ip, obj.db.username, obj.db.password, obj.db.dbname, obj.sentence.sentence)
 
         # 执行语句
-        res = sql_run(obj.db.ip, obj.db.port, obj.db.username, obj.db.password, obj.db.dbname, obj.sentence.sentence)
+        res = sql_run(obj.db.ip, obj.db.username, obj.db.password, obj.sentence.sentence)
         # print("res: ", res)
         if res.get("data"):
             obj.result = res.get("data")
@@ -45,3 +47,31 @@ class CheckTaskAdmin(admin.ModelAdmin):
             print("error: ", res.get("error"))
 
         return 0
+
+
+@admin.register(Inspect)
+class DBConfAdmin(admin.ModelAdmin):
+
+    list_display = ('__str__', )
+    change_list_template = "inspect_change_list.html"
+    db_list = []
+
+    def changelist_view(self, request, extra_context=None):
+        """
+        此方法控制访问admin
+        :param request:
+        :param extra_context:
+        :return:
+        """
+
+        db_list = DBConf.objects.filter()
+        sentence_list = SentenceTemplate.objects.filter()
+
+        context = {
+            "db_list": db_list,
+            'title': 1,
+            "sentence_list": sentence_list,
+            "opts": self.model._meta
+        }
+
+        return TemplateResponse(request, self.change_list_template, context)

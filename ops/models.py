@@ -4,16 +4,15 @@ from django.db import models
 
 
 class DBConf(models.Model):
-    ip = models.GenericIPAddressField("IP")
-    port = models.IntegerField("端口", default=1433)
+    ip = models.CharField("IP", max_length=128)
     username = models.CharField("用户名", max_length=128)
     password = models.CharField("密码", max_length=128)
-    dbname = models.CharField("db名称", max_length=128, null=True, blank=True)
+    # dbname = models.CharField("db名称", max_length=128, null=True, blank=True)
     dt_created = models.DateTimeField(auto_now_add=True, verbose_name='created datetime')
     dt_updated = models.DateTimeField(auto_now=True, verbose_name='updated datetime')
 
     def __str__(self):
-        return "{}-{}".format(self.ip, self.dbname)
+        return "{}".format(self.ip)
 
 
 class SentenceTemplate(models.Model):
@@ -37,3 +36,10 @@ class CheckTask(models.Model):
 
     def __str__(self):
         return "{}-{}".format(self.dt_created, self.sentence.desc)
+
+
+class Inspect(models.Model):
+    d = models.TextField("结果")
+
+    def __str__(self):
+        return str(self.id)
